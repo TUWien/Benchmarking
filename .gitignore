@@ -1,0 +1,3 @@
+# git ignore file
+build
+__pycache__

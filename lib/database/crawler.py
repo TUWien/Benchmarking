@@ -1,34 +1,45 @@
 #!/usr/local/bin/python
 
 
+# returns a DirInfo list with all subfolders of dirpath
 def crawl_folder(dirpath):
     import time
 
     start = time.clock()
-    af = []
-    crawl_recursive(dirpath, af)
+    dirs = []
+    crawl_recursive(dirpath, dirs)
 
     end = time.clock()
-    print("I found %d folders in %d secs" % (len(af), (end-start)))
 
-    # print("I found %d files, and you asked for %d files" %
-    #   (len(files), numfiles))
+    for f in dirs:
+
+        if f.size() > 0:
+            print(f.to_string())
+
+    print("I found %d candidates %d dirs in %d secs" %
+          (indexer.count_files(dirs), len(dirs), (end-start)))
+
+    return dirs
 
 
+# recusrive function that appends all subfolders to allfolders
 def crawl_recursive(dirpath, allfolders=[]):
     from database import indexer
 
-    cdirs = indexer.index_dirs(dirpath)
+    # convert to our infos
+    cdir = indexer.DirInfo(dirpath)
+    allfolders.append(cdir)
 
     # recursive call
-    for d in cdirs:
+    for d in cdir.subfolders():
         crawl_recursive(d, allfolders)
 
-    # convert to our infos
-    allfolders.append(indexer.dirs_to_info(cdirs))
-
-    # files = indexfiles(dirpath)
 
 if __name__ == "__main__":
     import sys
-    crawl_folder(sys.argv[1])
+    from database import indexer
+
+    indexer.DirInfo.ext = indexer.image_ext()
+    print(' '.join(('file extension:', indexer.DirInfo.ext)))
+
+    dirs = crawl_folder(sys.argv[1])

@@ -1,15 +1,40 @@
 #!/usr/local/bin/python
 
 
+# returns a RegExp string with common image extensions
+def image_ext():
+    return ".jp(e)?g$|.tif(f)?$|.png$|.bmp$"
+
+
+def is_valid(filename, ext=""):
+    import re
+
+    if ext == "":
+        return True
+
+    p = re.compile(ext, re.IGNORECASE)
+    m = p.search(filename)
+
+    if m:
+        return True
+    else:
+        return False
+
+
 # index a single folder and returns all files
-def index_files(dirpath):
+def index_files(dirpath, ext=""):
     from os import listdir
     from os.path import isfile, join
 
     filelist = []
 
     try:
-        filelist = [f for f in listdir(dirpath) if isfile(join(dirpath, f))]
+
+        for f in listdir(dirpath):
+            fpath = join(dirpath, f)
+            if isfile(fpath) and is_valid(fpath, ext):
+                filelist.append(fpath)
+
     except FileNotFoundError:
         print('%s does not exist - please specify a valid folder' % dirpath)
     except PermissionError:
@@ -35,7 +60,6 @@ def index_dirs(dirpath):
 
     except FileNotFoundError:
         print('%s does not exist - please specify a valid folder' % dirpath)
-        dirlist = []
     except PermissionError:
         print('%s permission denied' % dirpath)
 
@@ -51,19 +75,42 @@ def dirs_to_info(dirlist):
     return dirInfoList
 
 
+# returns the total number of matched files in dirInfoList
+def count_files(dirInfoList):
+
+    cnt = 0
+
+    for d in dirInfoList:
+        cnt += d.size()
+
+    return cnt
+
+
 class DirInfo:
     """Saves all info needed for each directory"""
 
-    def __init__(self, name):
+    ext = ""
+
+    def __init__(self, name=""):
         self.name = name
-        self.cnt = 0
+        self.filepaths = self._index()
 
-    def index(self):
-        self.cnt = len(index_files(self.name))
+    def _index(self):
+        return index_files(self.name, DirInfo.ext)
 
-    # yes the to string works
+    def subfolders(self):
+        return index_dirs(self.name)
+
+    def size(self):
+        return len(self.filepaths)
+
+    # lists the folder name and the number of files contained
     def to_string(self):
-        s = " ".join((self.name, 'has', str(self.cnt), 'files'))
+        s = ' '.join((self.name, 'has', str(self.size())))
+
+        # if DirInfo.ext != "":
+        #     s += ' '.join((' files with extension', DirInfo.ext))
+
         return s
 
 

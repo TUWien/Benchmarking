@@ -86,6 +86,17 @@ def count_files(dirInfoList):
     return cnt
 
 
+# returns a list with all filepaths
+def file_list(dirInfoList):
+
+    fpaths = []
+
+    for f in dirInfoList:
+        fpaths += f.filepaths
+
+    return fpaths
+
+
 class DirInfo:
     """Saves all info needed for each directory"""
 
@@ -106,7 +117,8 @@ class DirInfo:
 
     # lists the folder name and the number of files contained
     def to_string(self):
-        s = ' '.join((self.name, 'has', str(self.size())))
+
+        s = "[%s] \t %s" % (str(self.size()), self.name)
 
         # if DirInfo.ext != "":
         #     s += ' '.join((' files with extension', DirInfo.ext))

@@ -4,6 +4,7 @@
 # returns a DirInfo list with all subfolders of dirpath
 def crawl_folder(dirpath):
     import time
+    from database import indexer
 
     start = time.clock()
     dirs = []
@@ -11,12 +12,7 @@ def crawl_folder(dirpath):
 
     end = time.clock()
 
-    for f in dirs:
-
-        if f.size() > 0:
-            print(f.to_string())
-
-    print("I found %d candidates %d dirs in %d secs" %
+    print("I found %d candidates in %d dirs in %d secs" %
           (indexer.count_files(dirs), len(dirs), (end-start)))
 
     return dirs
@@ -29,6 +25,9 @@ def crawl_recursive(dirpath, allfolders=[]):
     # convert to our infos
     cdir = indexer.DirInfo(dirpath)
     allfolders.append(cdir)
+
+    # comment if you want a silent indexing
+    print(cdir.to_string())
 
     # recursive call
     for d in cdir.subfolders():

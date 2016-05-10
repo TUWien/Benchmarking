@@ -2,3 +2,4 @@
 
 from database.crawler import crawl_folder
 from database import indexer
+from database import cdb

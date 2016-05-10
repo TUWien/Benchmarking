@@ -28,6 +28,11 @@ This command locates all images in ``C:/temp``, reduces the set to 5 images and
 copies these images to ``C:/temp/reduced``. Then, ``C:/temp/db.txt`` is
 created which contains the paths to the original images of the reduced set.
 
+Call this function from python using:
 
+```
+import database
+print("\n".join(database.cdb.create_database("C:/temp", 13)))
+```
 ### Links
 - CVL http://www.caa.tuwien.ac.at/cvl/

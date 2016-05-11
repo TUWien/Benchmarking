@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 
+# splits string list with linebreaks and writes it to filename
 def write(filename, strList):
 
     data = "\n".join(strList)
@@ -10,6 +11,15 @@ def write(filename, strList):
     file.close()
 
     print("%s lines written to %s" % (str(len(strList)), filename))
+
+
+# read file's content in a string list
+def read(filename):
+
+    with open(filename, 'r') as file:
+        data = [s.replace('\n', '') for s in file.readlines()]
+
+    return data
 
 
 class Settings:
@@ -40,7 +50,8 @@ class Settings:
     # loads default keys
     def _load_default(self):
         self._add_key('debug_level', 0)
-        self._add_key('threads', -1)
+        self._add_key('processes', 6)
+        self._add_key('threads', 2)
 
     def _add_key(self, key, val):
 

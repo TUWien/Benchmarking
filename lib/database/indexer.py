@@ -75,6 +75,14 @@ def dirs_to_info(dirlist):
     return dirInfoList
 
 
+def dir_to_info(dirpath):
+
+    info = DirInfo(dirpath)
+    print(info.to_string())
+
+    return info
+
+
 # returns the total number of matched files in dirInfoList
 def count_files(dirInfoList):
 

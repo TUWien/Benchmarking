@@ -50,7 +50,7 @@ def reduce_set(dirInfos, numFilesDesired):
 def debug():
     from database import utils
 
-    fp = "C:/VSProjects/READ-python/Benchmarking/utils/settings.yml-d"
+    fp = "C:/VSProjects/READ-python/Benchmarking/utils/settings.yml"
     utils.Settings(fp)
 
     utils.Settings.print()

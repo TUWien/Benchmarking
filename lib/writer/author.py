@@ -3,7 +3,7 @@
 
 def generateList(filelist, outputfile=""):
     import os
-    # from writer import parsemets
+    import parsemets
     errors = ""
     logmsg = ""
 

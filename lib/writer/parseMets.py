@@ -101,6 +101,34 @@ def getFiles(link, physStruct):
                         fileList.append(child.attributes['FILEID'].value)
     return fileList
 
+
+def parsemets(filepath):
+    from xml.dom import minidom
+
+    author = []
+    files = []
+    xmldoc = minidom.parse(filepath)
+    logStruct = getLogicalStructure(xmldoc)
+    (dmdId, id) = getIds(logStruct)
+    if dmdId != -1 and id != -1:
+        personList = getPersonList(dmdId, xmldoc)
+        author = getAuthor(personList)
+        if author == 0:
+            print("no author found")
+        else:
+            fileLinks = getFileLinks(id, xmldoc)
+            physStruct = getPhysicalStructure(xmldoc)
+            files = []
+            for f in fileLinks:
+                file = getFiles(f, physStruct)
+                files.append(file)
+
+            print("\n\n\nauthor:" + author)
+            print("files:" + str(files))
+
+    return (author, files)
+
+
 if __name__ == "__main__":
     from xml.dom import minidom
 

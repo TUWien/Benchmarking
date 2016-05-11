@@ -18,14 +18,14 @@ def generateList(filelist, outputfile=""):
                 # check if date correct
                 if cur_writer.date == writerlist[cur_writer.name].date:
                     writerlist[cur_writer.name].addPages(cur_writer.pages)
-                    logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to existing writer (" + cur_writer.name + ")\n"
+                    logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to existing writer (" + str(str(cur_writer.name).encode('utf-8')) + ")\n"
                 else:
-                    print("skipping %s because date does not agree" % cur_writer.name)
+                    print("skipping %s because date does not agree" % str(str(cur_writer.name).encode('utf-8')))
                     errors += "date mismatch: " + f + "\n"
                     logmsg += " processed:\t" + "date mismatch\n"
             else:
                 writerlist[cur_writer.name] = cur_writer
-                logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to new writer (" + cur_writer.name + ")\n"
+                logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to new writer (" + str(str(cur_writer.name).encode('utf-8')) + ")\n"
         else:
             errors  += "no author detected: " + f + "\n"
             logmsg += " processed:\t" + "no author detected\n"

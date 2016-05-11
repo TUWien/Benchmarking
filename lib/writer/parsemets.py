@@ -158,6 +158,7 @@ if __name__ == "__main__":
     filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/1447421/1447421_mets.xml'
 
     filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/1178030/1178030_mets.xml'
+    filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/1420675/1420675_mets.xml'
     # no author
     # filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusswa/1013350/1013350_mets.xml'
     parsemets(filepath)

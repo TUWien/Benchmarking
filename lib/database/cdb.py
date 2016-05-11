@@ -6,6 +6,9 @@ def create_database(dirpath, numFilesDesired, ext=''):
     from database import crawler
     from database import indexer
 
+    # init settings - I personally do not like this design...
+    utils.Settings()
+
     # first choose which extensions to search for
     if ext == '':
         indexer.DirInfo.ext = indexer.image_ext()
@@ -36,13 +39,16 @@ def reduce_set(dirInfos, numFilesDesired):
     # compute step for reduced set
     step = math.floor(nf/numFilesDesired)
 
+    print('step size: %d' % step)
+
     # first step through equidistantly
     rf = files[0:len(files):step]
 
     # now crop - to remove the error from floor (step)
-    rf = files[0:numFilesDesired]
+    rf = rf[0:numFilesDesired]
 
     return rf
+
 
 if __name__ == "__main__":
     import argparse
@@ -66,9 +72,15 @@ if __name__ == "__main__":
                         help="""if set, only files with the given extension
                         will be used (common image extensions are matched by
                         default)""")
+    parser.add_argument('--settings', default="", metavar="path-to-settings",
+                        help="""loads settings from the file""")
 
     args = parser.parse_args()
 
+    # init settings - I personally do not like this design...
+    utils.Settings(args.settings)
+
+    # index harddisk and reduce fileset
     set = create_database(args.root, args.nsamples, args.ext)
 
     if args.outfile != "":

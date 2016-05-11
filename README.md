@@ -4,17 +4,22 @@ are contained in this repository.
 
 ## Building
 
-### Requirements
-- Python 3.4.4 or newer (see https://www.python.org/downloads/)
+#### Requirements
+Python 3.4.4 or newer (see https://www.python.org/downloads/)
 
-### Build Steps
-Open this directory (containing the ``setup.py``) in a command line and type
+#### Build Steps
+- Install required modules:
+```
+pip install pyyaml
+```
+
+- Open this directory (containing the ``setup.py``) in a command line and type
 ```
 python setup.py install
 ```
 
 ### Database
-Database contains scripts to crawl your harddisk and reduce the number of
+Database contains scripts to crawl your hard disk and reduce the number of
 specific file types. See:
 ```
 python lib\database\cdb.py --help
@@ -32,7 +37,8 @@ Call this function from python using:
 
 ```
 import database
-print("\n".join(database.cdb.create_database("C:/temp", 13)))
+rf = database.cdb.create_database("C:/temp", 13)
+print("\n".join(rf))
 ```
 ### Links
 - CVL http://www.caa.tuwien.ac.at/cvl/

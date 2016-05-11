@@ -1,0 +1,4 @@
+# YAML
+processes: 6
+threads: 9
+debug_level: 0

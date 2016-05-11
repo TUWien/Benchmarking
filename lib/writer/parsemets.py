@@ -56,6 +56,7 @@ def getPersonList(dmdId, xmldoc):
 def getAuthor(personList):
 
     name = 0
+    date = 0
     for p in personList:
         role = p.getElementsByTagName(ROLE_ELEMENT)
         for r in role:
@@ -66,11 +67,11 @@ def getAuthor(personList):
                     for n in name:
                         if n.hasAttribute("type"):
                             if n.attributes['type'].value == "date":
-                                print("date:" + n.firstChild.nodeValue)
+                                date = n.firstChild.nodeValue
                         else:
                             name = n.firstChild.nodeValue
 
-    return name
+    return name, date
 
 
 def getFileLinks(id, xmldoc):
@@ -120,7 +121,8 @@ def parsemets(filepath):
     (dmdId, id) = getIds(logStruct)
     if dmdId != -1 and id != -1:
         personList = getPersonList(dmdId, xmldoc)
-        author = getAuthor(personList)
+        (author,date) = getAuthor(personList)
+        print(type(date))
         if author == 0:
             print("no author found")
         else:
@@ -143,41 +145,10 @@ def parsemets(filepath):
 if __name__ == "__main__":
     from xml.dom import minidom
 
-    l = []
-    l.append("test")
-    l.append('test')
-    l.append('test')
-    for u in l:
-        print(u)
-    xmldoc = minidom.parse(
-        'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml'
-    )
-    # xmldoc = minidom.parse
-    # ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/108192/108192_mets.xml')
-    # xmldoc = minidom.parse(
-    #     'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/' +
-    #     '1447421/1447421_mets.xml')
+    filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml'
+    filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/108192/108192_mets.xml'
+    filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/1447421/1447421_mets.xml'
 
-    # no aut
-    # xmldoc = minidom.parse(
-    #     'E:/Databases/unibas_eManuscripta_firstExamples/emanusswa/' +
-    #     '1013350/1013350_mets.xml')
-    logStruct = getLogicalStructure(xmldoc)
-    (dmdId, id) = getIds(logStruct)
-    print(dmdId)
-    if dmdId != -1 and id != -1:
-        personList = getPersonList(dmdId, xmldoc)
-        author = getAuthor(personList)
-        if author == 0:
-            print("no author found")
-            quit()
-        fileLinks = getFileLinks(id, xmldoc)
-        physStruct = getPhysicalStructure(xmldoc)
-        files = []
-        for f in fileLinks:
-            file = getFiles(f, physStruct)
-            for f in file:
-                files.append(f)
-
-        print("\n\n\nauthor:" + author)
-        print("files:" + str(files))
+    # no author
+    # filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusswa/1013350/1013350_mets.xml'
+    parsemets(filepath)

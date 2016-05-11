@@ -6,6 +6,9 @@ def create_database(dirpath, numFilesDesired, ext=''):
     from database import crawler
     from database import indexer
 
+    # init settings - I personally do not like this design...
+    utils.Settings()
+
     # first choose which extensions to search for
     if ext == '':
         indexer.DirInfo.ext = indexer.image_ext()
@@ -47,15 +50,6 @@ def reduce_set(dirInfos, numFilesDesired):
     return rf
 
 
-def debug():
-    from database import utils
-
-    fp = "C:/VSProjects/READ-python/Benchmarking/utils/settings.yml"
-    utils.Settings(fp)
-
-    utils.Settings.print()
-
-
 if __name__ == "__main__":
     import argparse
     from database import utils
@@ -78,12 +72,13 @@ if __name__ == "__main__":
                         help="""if set, only files with the given extension
                         will be used (common image extensions are matched by
                         default)""")
-
-    debug()
-
-    # TODO: add a folder filter
+    parser.add_argument('--settings', default="", metavar="path-to-settings",
+                        help="""loads settings from the file""")
 
     args = parser.parse_args()
+
+    # init settings - I personally do not like this design...
+    utils.Settings(args.settings)
 
     # index harddisk and reduce fileset
     set = create_database(args.root, args.nsamples, args.ext)

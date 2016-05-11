@@ -4,13 +4,16 @@
 # splits string list with linebreaks and writes it to filename
 def write(filename, strList):
 
-    data = "\n".join(strList)
+    try:
+        data = "\n".join(strList)
 
-    file = open(filename, 'w')
-    file.write(data)
-    file.close()
-
-    print("%s lines written to %s" % (str(len(strList)), filename))
+        file = open(filename, 'w')
+        file.write(data)
+        file.close()
+        print("%s lines written to %s" % (str(len(strList)), filename))
+    except Exception as e:
+        print("WARNING: I cannot save to %s" % filename)
+        print(e)
 
 
 # read file's content in a string list

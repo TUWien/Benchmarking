@@ -43,22 +43,27 @@ def crawl_recursive_threaded(dirpath):
     return dirInfos
 
 
-# recusrive function that appends all subfolders to allfolders
+# recusrive function that returns all subfolders of a given path
 def crawl_recursive(dirpath):
     from database import indexer
 
-    # convert to our info
-    cdir = indexer.DirInfo(dirpath)
-
-    # comment if you want a silent indexing
-    if cdir.size() > 0:
-        print(cdir.to_string())
-
-    # recursive call
     dirInfos = []
-    for d in cdir.subfolders():
-        dirInfos += crawl_recursive(d)
-    dirInfos.append(cdir)
+
+    try:
+        # convert to our info
+        cdir = indexer.DirInfo(dirpath)
+
+        # comment if you want a silent indexing
+        if cdir.size() > 0:
+            print(cdir.to_string())
+
+        # recursive call
+        for d in cdir.subfolders():
+            dirInfos += crawl_recursive(d)
+        dirInfos.append(cdir)
+    except Exception as e:
+        print("Sorry, I cannot index: %s" % dirpath)
+        print(e)
 
     return dirInfos
 

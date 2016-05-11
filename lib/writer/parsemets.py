@@ -10,6 +10,7 @@ ROLE_ELEMENT = 'mods:roleTerm'
 
 
 def getLogicalStructure(xmldoc):
+    from xml.dom import minidom
 
     print("getting logical structure")
     itemlist = xmldoc.getElementsByTagName(STRUCT_MAP)
@@ -136,13 +137,13 @@ def parsemets(filepath):
 if __name__ == "__main__":
     from xml.dom import minidom
 
-    # xmldoc = minidom.parse#
-    # ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml')
+    xmldoc = minidom.parse
+    ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml')
     # xmldoc = minidom.parse
     # ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/108192/108192_mets.xml')
-    xmldoc = minidom.parse(
-        'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/' +
-        '1447421/1447421_mets.xml')
+    # xmldoc = minidom.parse(
+    #     'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/' +
+    #     '1447421/1447421_mets.xml')
 
     # no aut
     # xmldoc = minidom.parse(

@@ -2,6 +2,7 @@
 
 """ module for parsing the mets file. use parsemets to get author and filelist"""
 
+
 STRUCT_MAP = 'mets:structMap'
 DIV_ELEMENT = 'mets:div'
 DMD_SECTION = 'mets:dmdSec'
@@ -111,6 +112,7 @@ def getFiles(link, physStruct):
 
 def parsemets(filepath):
     from xml.dom import minidom
+    import writer
     import os
 
     author = []
@@ -119,27 +121,30 @@ def parsemets(filepath):
     xmldoc = minidom.parse(filepath)
     logStruct = getLogicalStructure(xmldoc)
     (dmdId, id) = getIds(logStruct)
+    cur_writer = 0
     if dmdId != -1 and id != -1:
         personList = getPersonList(dmdId, xmldoc)
         (author,date) = getAuthor(personList)
-        print(type(date))
         if author == 0:
             print("no author found")
         else:
+            cur_writer = writer.Writer(author, [], date)
             fileLinks = getFileLinks(id, xmldoc)
             physStruct = getPhysicalStructure(xmldoc)
             files = []
+
             for f in fileLinks:
                 file = getFiles(f, physStruct)
+                print("len file:" + str(len(file)))
                 for f in file:
                     # TODO : CHANGE ME!!!!
                     fullPath = cur_dir + "\\img\\" + f + ".jpg"
-                    files.append(fullPath)
+                    cur_writer.addPage(fullPath)
 
             print("\n\n\nauthor:" + author)
             print("files:" + str(files))
 
-    return (author, files)
+    return cur_writer
 
 
 if __name__ == "__main__":

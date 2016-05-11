@@ -1,46 +1,46 @@
 #!/usr/local/bin/python
 
 
-class Author:
-    """ Saves the author information and the list of his pages"""
-
-    def __init__(self, name="", pages = []):
-        self.name = name
-        self.pages = pages
-
-    def addPages(self,newpages):
-        for n in newpages:
-            self.pages.append(n)
-
-
 def generateList(filelist, outputfile=""):
-    from writer import parsemets
+    # from writer import parsemets
+    errors = ""
 
-    authorlist = {}
+    writerlist = {}
     for f in filelist:
         print(f)
-        (author, files) = parsemets.parsemets(f)
-        if author != 0:
-            if author in authorlist:
-                authorlist[author].addPages(files)
+        cur_writer = parsemets.parsemets(f)
+        if cur_writer != 0:
+            if cur_writer.name in writerlist:
+                # check if date correct
+                if cur_writer.date == writerlist[cur_writer.name].date:
+                    writerlist[cur_writer.name].addPages(cur_writer.pages)
+                else:
+                    print("skipping %s because date does not agree" % cur_writer.name)
+                    errors += "date mismatch: " + f + "\n"
             else:
-                authorlist[author] = Author(author, files)
+                writerlist[cur_writer.name] = cur_writer
+        else:
+            errors  += "no author detected: " + f + "\n"
+
 
     print("\n\nprinting list")
-    for a in authorlist:
-        print(a)
-        print(authorlist[a].pages)
+    for w in writerlist:
+        print(w + " " + str(writerlist[w].date))
+        print(writerlist[w].pages)
 
     if outputfile != "":
         f = open(outputfile, 'w')
-        for a in authorlist:
-            f.write(a + ";")
-            f.write(str(len(authorlist[a].pages)) + ";")
-            for p in authorlist[a].pages:
+        for w in writerlist:
+            f.write(w + ";")
+            f.write(str(len(writerlist[w].pages)) + ";")
+            for p in writerlist[w].pages:
                 f.write("%s" % p + ";")
             f.write("\n")
         f.close()
-    return authorlist
+
+    print("printing errors:-")
+    print(errors)
+    return writerlist
 
 
 def loadfilelist(inputfile):
@@ -55,6 +55,7 @@ def generate_author_database(inputfile, outputfile):
 
 
 if __name__ == "__main__":
+    import parsemets
     print("generating list")
 
     # filelist = []

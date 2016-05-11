@@ -66,21 +66,13 @@ def index_dirs(dirpath):
     return dirlist
 
 
-def dirs_to_info(dirlist):
+def dirs_to_info(dirlist, ext):
 
     dirInfoList = []
     for d in dirlist:
-        dirInfoList.append(DirInfo(d))
+        dirInfoList.append(DirInfo(d, ext))
 
     return dirInfoList
-
-
-def dir_to_info(dirpath):
-
-    info = DirInfo(dirpath)
-    print(info.to_string())
-
-    return info
 
 
 # returns the total number of matched files in dirInfoList
@@ -96,11 +88,12 @@ def count_files(dirInfoList):
 
 # returns a list with all filepaths
 def file_list(dirInfoList):
+    from database import utils
 
     fpaths = []
 
-    for f in dirInfoList:
-        fpaths += f.filepaths
+    for info in dirInfoList:
+        fpaths += [utils.clean_path(f) for f in info.filepaths]
 
     return fpaths
 
@@ -108,14 +101,13 @@ def file_list(dirInfoList):
 class DirInfo:
     """Saves all info needed for each directory"""
 
-    ext = ""
-
-    def __init__(self, name=""):
+    def __init__(self, name="", ext=""):
         self.name = name
+        self.ext = ext
         self.filepaths = self._index()
 
     def _index(self):
-        return index_files(self.name, DirInfo.ext)
+        return index_files(self.name, self.ext)
 
     def subfolders(self):
         return index_dirs(self.name)
@@ -127,9 +119,6 @@ class DirInfo:
     def to_string(self):
 
         s = "[%s] \t %s" % (str(self.size()), self.name)
-
-        # if DirInfo.ext != "":
-        #     s += ' '.join((' files with extension', DirInfo.ext))
 
         return s
 

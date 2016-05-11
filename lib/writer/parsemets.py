@@ -103,15 +103,18 @@ def getFiles(link, physStruct):
                     child.hasAttribute("FILEID") and
                     str(child.attributes['FILEID'].value).find("MAX", 0) > 0
                 ):
-                        fileList.append(child.attributes['FILEID'].value)
+                        file = child.attributes['FILEID'].value
+                        fileList.append(file)
     return fileList
 
 
 def parsemets(filepath):
     from xml.dom import minidom
+    import os
 
     author = []
     files = []
+    cur_dir = os.path.dirname(filepath)
     xmldoc = minidom.parse(filepath)
     logStruct = getLogicalStructure(xmldoc)
     (dmdId, id) = getIds(logStruct)
@@ -126,7 +129,10 @@ def parsemets(filepath):
             files = []
             for f in fileLinks:
                 file = getFiles(f, physStruct)
-                files.append(file)
+                for f in file:
+                    # TODO : CHANGE ME!!!!
+                    fullPath = cur_dir + "\\img\\" + f + ".jpg"
+                    files.append(fullPath)
 
             print("\n\n\nauthor:" + author)
             print("files:" + str(files))
@@ -137,8 +143,15 @@ def parsemets(filepath):
 if __name__ == "__main__":
     from xml.dom import minidom
 
-    xmldoc = minidom.parse
-    ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml')
+    l = []
+    l.append("test")
+    l.append('test')
+    l.append('test')
+    for u in l:
+        print(u)
+    xmldoc = minidom.parse(
+        'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/913119/913119_mets.xml'
+    )
     # xmldoc = minidom.parse
     # ('E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/108192/108192_mets.xml')
     # xmldoc = minidom.parse(
@@ -163,7 +176,8 @@ if __name__ == "__main__":
         files = []
         for f in fileLinks:
             file = getFiles(f, physStruct)
-            files.append(file)
+            for f in file:
+                files.append(f)
 
         print("\n\n\nauthor:" + author)
         print("files:" + str(files))

@@ -1,3 +1,7 @@
+#!/usr/local/bin/python
+
+""" module for parsing the mets file. use parsemets to get author and filelist"""
+
 STRUCT_MAP = 'mets:structMap'
 DIV_ELEMENT = 'mets:div'
 DMD_SECTION = 'mets:dmdSec'

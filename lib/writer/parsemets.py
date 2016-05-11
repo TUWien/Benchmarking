@@ -13,7 +13,7 @@ ROLE_ELEMENT = 'mods:roleTerm'
 def getLogicalStructure(xmldoc):
     from xml.dom import minidom
 
-    print("getting logical structure")
+    # print("getting logical structure")
     itemlist = xmldoc.getElementsByTagName(STRUCT_MAP)
     for i in itemlist:
         if i.attributes['TYPE'].value == "LOGICAL":
@@ -22,7 +22,7 @@ def getLogicalStructure(xmldoc):
 
 def getPhysicalStructure(xmldoc):
 
-    print("getting physical structure")
+    # print("getting physical structure")
     itemlist = xmldoc.getElementsByTagName(STRUCT_MAP)
     for i in itemlist:
         if i.attributes['TYPE'].value == "PHYSICAL":
@@ -31,7 +31,7 @@ def getPhysicalStructure(xmldoc):
 
 def getIds(logStruct):
 
-    print("getting Ids")
+    # print("getting Ids")
     itemlist = logStruct.getElementsByTagName(DIV_ELEMENT)
     dmdId = -1
     id = -1
@@ -39,13 +39,13 @@ def getIds(logStruct):
         if i.attributes['TYPE'].value == "document":
             dmdId = i.attributes['DMDID'].value
             id = i.attributes['ID'].value
-            print("dmdid:" + dmdId)
-            print("id:" + id)
+            # print("dmdid:" + dmdId)
+            # print("id:" + id)
     return(dmdId, id)
 
 
 def getPersonList(dmdId, xmldoc):
-    print("searching for dmdSec")
+    # print("searching for dmdSec")
 
     itemlist = xmldoc.getElementsByTagName(DMD_SECTION)
 
@@ -71,21 +71,18 @@ def getAuthor(personList):
                 if code == "aut":
                     name = p.getElementsByTagName('mods:namePart')
                     for n in name:
-                        print(n)
-                        print(n.attributes)
                         if n.hasAttribute("type"):
                             if n.attributes['type'].value == "date":
                                 date = n.firstChild.nodeValue
                         else:
                             name = n.firstChild.nodeValue
-                            print("name: " + name)
 
     return name, date
 
 
 def getFileLinks(id, xmldoc):
 
-    print("searching for files")
+    # print("searching for files")
     itemlist = xmldoc.getElementsByTagName('mets:structLink')
 
     fileLinks = []
@@ -102,12 +99,11 @@ def getFileLinks(id, xmldoc):
 
 def getFiles(link, physStruct):
 
-    print("getting files for fileLink:" + link)
+    # print("getting files for fileLink:" + link)
     itemlist = physStruct.getElementsByTagName(DIV_ELEMENT)
     fileList = []
     for item in itemlist:
         if item.hasAttribute("ID") and item.attributes['ID'].value == link:
-            print("id:" + item.attributes['ID'].value)
             for child in item.childNodes:
                 if (
                     child.hasAttribute("FILEID") and
@@ -143,14 +139,13 @@ def parsemets(filepath):
 
             for f in fileLinks:
                 file = getFiles(f, physStruct)
-                print("len file:" + str(len(file)))
                 for f in file:
                     # TODO : CHANGE ME!!!!
                     fullPath = cur_dir + "\\img\\" + f + ".jpg"
                     cur_writer.addPage(fullPath)
 
-            print("\n\n\nauthor:" + author)
-            print("files:" + str(cur_writer.pages))
+            # print("\n\n\nauthor:" + author)
+            # print("files:" + str(cur_writer.pages))
 
     return cur_writer
 

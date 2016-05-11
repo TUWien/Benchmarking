@@ -21,13 +21,13 @@ def generateList(filelist, outputfile=""):
                 else:
                     print("skipping %s because date does not agree" % cur_writer.name)
                     errors += "date mismatch: " + f + "\n"
-                    logmsg += " processed:\t" + "date mismatch\n";
+                    logmsg += " processed:\t" + "date mismatch\n"
             else:
                 writerlist[cur_writer.name] = cur_writer
                 logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to new writer (" + cur_writer.name + ")\n"
         else:
             errors  += "no author detected: " + f + "\n"
-            logmsg += " processed:\t" + "no author detected\n";
+            logmsg += " processed:\t" + "no author detected\n"
 
 
     print("\n\nprinting list")

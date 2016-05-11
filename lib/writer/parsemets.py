@@ -49,9 +49,14 @@ def getPersonList(dmdId, xmldoc):
 
     itemlist = xmldoc.getElementsByTagName(DMD_SECTION)
 
+    plist = []
     for i in itemlist:
         if i.attributes['ID'].value == dmdId:
-            return i.getElementsByTagName(NAME_ELEMENT)
+            nodes = i.getElementsByTagName(NAME_ELEMENT)
+            for n in nodes:
+                if n.hasAttribute("usage") and n.attributes['usage'].value == "primary":
+                    return [n]
+            return nodes
 
 
 def getAuthor(personList):
@@ -66,11 +71,14 @@ def getAuthor(personList):
                 if code == "aut":
                     name = p.getElementsByTagName('mods:namePart')
                     for n in name:
+                        print(n)
+                        print(n.attributes)
                         if n.hasAttribute("type"):
                             if n.attributes['type'].value == "date":
                                 date = n.firstChild.nodeValue
                         else:
                             name = n.firstChild.nodeValue
+                            print("name: " + name)
 
     return name, date
 

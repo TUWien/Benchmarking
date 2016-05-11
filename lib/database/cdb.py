@@ -36,13 +36,25 @@ def reduce_set(dirInfos, numFilesDesired):
     # compute step for reduced set
     step = math.floor(nf/numFilesDesired)
 
+    print('step size: %d' % step)
+
     # first step through equidistantly
     rf = files[0:len(files):step]
 
     # now crop - to remove the error from floor (step)
-    rf = files[0:numFilesDesired]
+    rf = rf[0:numFilesDesired]
 
     return rf
+
+
+def debug():
+    from database import utils
+
+    fp = "C:/VSProjects/READ-python/Benchmarking/utils/settings.yml-d"
+    utils.Settings(fp)
+
+    utils.Settings.print()
+
 
 if __name__ == "__main__":
     import argparse
@@ -67,8 +79,13 @@ if __name__ == "__main__":
                         will be used (common image extensions are matched by
                         default)""")
 
+    debug()
+
+    # TODO: add a folder filter
+
     args = parser.parse_args()
 
+    # index harddisk and reduce fileset
     set = create_database(args.root, args.nsamples, args.ext)
 
     if args.outfile != "":

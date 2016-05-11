@@ -4,6 +4,7 @@
 def generateList(filelist, outputfile=""):
     import os
     import parsemets
+
     errors = ""
     logmsg = ""
 
@@ -17,14 +18,14 @@ def generateList(filelist, outputfile=""):
                 # check if date correct
                 if cur_writer.date == writerlist[cur_writer.name].date:
                     writerlist[cur_writer.name].addPages(cur_writer.pages)
-                    logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to existing writer (" + cur_writer.name + ")\n"
+                    logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to existing writer (" + str(str(cur_writer.name).encode('utf-8')) + ")\n"
                 else:
-                    print("skipping %s because date does not agree" % cur_writer.name)
+                    print("skipping %s because date does not agree" % str(str(cur_writer.name).encode('utf-8')))
                     errors += "date mismatch: " + f + "\n"
                     logmsg += " processed:\t" + "date mismatch\n"
             else:
                 writerlist[cur_writer.name] = cur_writer
-                logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to new writer (" + cur_writer.name + ")\n"
+                logmsg += " processed:\t" + str(len(cur_writer.pages)) + " pages added to new writer (" + str(str(cur_writer.name).encode('utf-8')) + ")\n"
         else:
             errors  += "no author detected: " + f + "\n"
             logmsg += " processed:\t" + "no author detected\n"
@@ -32,27 +33,28 @@ def generateList(filelist, outputfile=""):
 
     print("\n\nprinting list")
     for w in writerlist:
-        print(w + " " + str(writerlist[w].date) + " " + str(len(writerlist[w].pages)) + " pages")
+        encw = str(w).encode('utf-8',errors='ignore')
+        enco = str(" " + str(writerlist[w].date) + " " + str(len(writerlist[w].pages)) + " pages").encode('utf-8',errors='ignore')
+        print(encw + enco)
         # print(writerlist[w].pages)
 
     if outputfile != "":
-        f = open(outputfile, 'w')
+        f = open(outputfile, 'wb')
         for w in writerlist:
-            f.write(w + ";")
-            f.write(str(len(writerlist[w].pages)) + ";")
+            f.write(str(w + ";" + str(len(writerlist[w].pages)) + ";").encode('utf-8'))
             for p in writerlist[w].pages:
-                f.write("%s" % p + ";")
-            f.write("\n")
+                f.write(str("%s" % p + ";").encode('utf-8'))
+            f.write(str("\n").encode('utf-8'))
         f.close()
 
         errorfile = os.path.splitext(outputfile)[0]+'-error.txt'
-        f = open(errorfile, 'w')
-        f.write(errors)
+        f = open(errorfile, 'wb')
+        f.write(errors.encode('utf-8'))
         f.close()
 
         logfile = os.path.splitext(outputfile)[0] + '-log.txt'
-        f = open(logfile, 'w')
-        f.write(logmsg)
+        f = open(logfile, 'wb')
+        f.write(logmsg.encode('utf-8'))
         f.close()
 
     print("printing errors:-")

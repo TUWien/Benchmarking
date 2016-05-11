@@ -6,7 +6,7 @@
 class Writer:
     """ Saves the author information and the list of his pages"""
 
-    def __init__(self, name="", pages = [], date = []):
+    def __init__(self, name="", pages=[], date=[]):
         self.name = name
         self.pages = pages
         self.date = date

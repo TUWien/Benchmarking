@@ -2,6 +2,7 @@
 
 
 def generateList(filelist, outputfile=""):
+    import os
     # from writer import parsemets
     errors = ""
 
@@ -25,7 +26,7 @@ def generateList(filelist, outputfile=""):
 
     print("\n\nprinting list")
     for w in writerlist:
-        print(w + " " + str(writerlist[w].date))
+        print(w + " " + str(writerlist[w].date) + " " + str(len(writerlist[w].pages)) + " pages")
         print(writerlist[w].pages)
 
     if outputfile != "":
@@ -37,6 +38,12 @@ def generateList(filelist, outputfile=""):
                 f.write("%s" % p + ";")
             f.write("\n")
         f.close()
+
+        errorfile = os.path.splitext(outputfile)[0]+'-error.txt'
+        f = open(errorfile, 'w')
+        f.write(errors)
+        f.close()
+
 
     print("printing errors:-")
     print(errors)

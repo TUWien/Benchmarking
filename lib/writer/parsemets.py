@@ -142,7 +142,7 @@ def parsemets(filepath):
                     cur_writer.addPage(fullPath)
 
             print("\n\n\nauthor:" + author)
-            print("files:" + str(files))
+            print("files:" + str(cur_writer.pages))
 
     return cur_writer
 
@@ -154,6 +154,7 @@ if __name__ == "__main__":
     filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/108192/108192_mets.xml'
     filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusbau/1447421/1447421_mets.xml'
 
+    filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/1178030/1178030_mets.xml'
     # no author
     # filepath = 'E:/Databases/unibas_eManuscripta_firstExamples/emanusswa/1013350/1013350_mets.xml'
     parsemets(filepath)

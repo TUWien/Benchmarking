@@ -28,11 +28,11 @@ class WriterList:
 
     def add_or_update(self, writer: Writer):
         for w in self.wlist:
-            if w.name == writer.name and w.date == writer.date:
+            if w.name == writer.name and str(w.date) == str(writer.date):
                 w.addPages(writer.pages)
                 print("added pages to writer with id " + str(w.id))
                 return w.id
-            elif w.name == writer.name and w.date != writer.date:
+            elif w.name == writer.name and str(w.date) != str(writer.date):
                 self.__id += 1
                 writer = self.__id
                 self.wlist.append(writer)

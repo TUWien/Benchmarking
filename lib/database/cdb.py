@@ -15,8 +15,6 @@ def create_database_batch(args):
         print("creating new database: %s --------------" % cdir)
         cargs = args.copy()
         folder = os.path.basename(cdir)
-        print("cfolder: %s" % folder)
-        print(cargs)
 
         dstname = "-".join((folder, str(cargs['nsamples'])))
         logname = ".".join((dstname, "log"))

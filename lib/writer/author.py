@@ -24,9 +24,11 @@ def generate_list(filelist, outputfile=""):
                 else:
                     print("skipping %s because date does not agree" %
                           str(str(cur_writer.name).encode('utf-8')))
-                    errors += "date mismatch: " + f + "\n"
+                    errors += "date mismatch: " + f + "(current:" + \
+                              str(str(cur_writer.date).encode('utf-8'))+" stored:" + \
+                              str(str(writerlist[cur_writer.name].date).encode('utf-8')) + " \n"
                     logmsg += " processed:\t" + "date mismatch (current:" + \
-                              cur_writer.date+" stored:" + \
+                              str(str(cur_writer.date).encode('utf-8'))+" stored:" + \
                               str(str(writerlist[cur_writer.name].date).encode('utf-8')) + " \n"
             else:
                 writerlist[cur_writer.name] = cur_writer

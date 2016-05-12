@@ -35,8 +35,11 @@ if __name__ == "__main__":
     if os.listdir(args.outdir) != []:
         print("output directory is not empty ... exiting")
         exit()
+
     if args.maxnum == 0 or args.maxnum == []:
         maxnum = args.minnum
+    else:
+        maxnum = args.maxnum
 
     f = open(args.infile, 'rb')
     writerlist = pickle.load(f)

@@ -63,14 +63,13 @@ if __name__ == "__main__":
         os.mkdir(writer_dir)
 
         # compute step for reduced set
-        step = math.floor(len(writerlist[w].pages) / maxnum)
+        step = math.ceil(len(writerlist[w].pages) / maxnum)
 
         print('step size: %d' % step)
 
         # first step through equidistantly
         newpages = writerlist[w].pages[0:len(writerlist[w].pages):step]
 
-        # now crop - to remove the error from floor (step)
         writerlist[w].pages = newpages[0:maxnum]
 
         for p in writerlist[w].pages:

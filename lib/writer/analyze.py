@@ -26,7 +26,7 @@ if __name__ == "__main__":
     filelist = author.load_filelist(args.infile)
     wl = author.generate_list(filelist, args.outfile)
 
-    if args.dumpfile is not None:
+    if args.dumpfile != "":
         import pickle
         f = open(args.dumpfile, 'wb')
         pickle.dump(wl, f, pickle.HIGHEST_PROTOCOL)

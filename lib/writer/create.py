@@ -82,11 +82,11 @@ if __name__ == "__main__":
         for p in pages:
             copy(p, writer_dir)
 
-        mapping[w.id] = w
+        mapping[w.id] = str(w.name) + ";" + str(w.date) + ";"
 
     if args.mapfile != "":
         f = open(args.mapfile, 'wb')
         for m in mapping:
-            o = str(str(m) + "\t" + str(mapping[m] + "\n")).encode('utf-8')
+            o = str(str(m) + ";" + str(mapping[m] + "\n")).encode('utf-8')
             f.write(o)
         f.close()

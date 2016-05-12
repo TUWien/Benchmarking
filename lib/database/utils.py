@@ -25,6 +25,10 @@ def read(filename):
     return data
 
 
+def clean_path(p):
+    return p.replace("\\", "/")
+
+
 class Settings:
     """Reads settings from a yaml and provides them to all functions"""
 

@@ -2,7 +2,7 @@
 
 
 # returns a DirInfo list with all subfolders of dirpath
-def create_database(dirpath, numFilesDesired, ext=''):
+def create_database(dirpath, numFilesDesired, ext):
     from database import crawler
     from database import indexer
 
@@ -11,15 +11,11 @@ def create_database(dirpath, numFilesDesired, ext=''):
 
     # first choose which extensions to search for
     if ext == '':
-        indexer.DirInfo.ext = indexer.image_ext()
-    else:
-        indexer.DirInfo.ext = ext
+        ext = indexer.image_ext()
 
-    print(' '.join(('file extension:', indexer.DirInfo.ext)))
-
-    dirs = crawler.crawl_folder(dirpath)
-
+    dirs = crawler.crawl_folder(dirpath, ext)
     fileset = reduce_set(dirs, numFilesDesired)
+
     return fileset
 
 
@@ -53,6 +49,7 @@ def reduce_set(dirInfos, numFilesDesired):
 if __name__ == "__main__":
     import argparse
     from database import utils
+    from database import cloner
 
     # argument parser
     parser = argparse.ArgumentParser(description='Reduce a database')
@@ -74,6 +71,9 @@ if __name__ == "__main__":
                         default)""")
     parser.add_argument('--settings', default="", metavar="path-to-settings",
                         help="""loads settings from the file""")
+    parser.add_argument('--flatcopy', default=0, metavar='0', type=int,
+                        help="""if true, a flat copy is created (no folder
+                             tree)""")
 
     args = parser.parse_args()
 
@@ -86,4 +86,4 @@ if __name__ == "__main__":
     if args.outfile != "":
         utils.write(args.outfile, set)
     if args.copyto != "":
-        print("copy to is not implemented yet")
+        cloner.clone(set, args.root, args.copyto, args.flatcopy)

@@ -15,11 +15,21 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument('--outfile', default="", metavar="text-file",
                         help="""csv file were the different writers with their
-                            pages are written""",
+                            pages are written, -log.txt and -error.txt are
+                            created automatically""",
                         required=True)
+    parser.add_argument('--dumpfile', default="", metavar="pkl-file",
+                        help="""dumps the writer list to this file""")
 
     args = parser.parse_args()
 
     filelist = author.load_filelist(args.infile)
-    author.generate_list(filelist, args.outfile)
+    wl = author.generate_list(filelist, args.outfile)
+
+    if args.dumpfile is not None:
+        import pickle
+        f = open(args.dumpfile, 'wb')
+        pickle.dump(wl, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
+
     print("done")

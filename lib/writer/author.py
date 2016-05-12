@@ -96,5 +96,21 @@ if __name__ == "__main__":
     #     'emanusswa/1013350/1013350_mets.xml')
 
     filelist = load_filelist("c:/tmp/db.txt")
-    generate_list(filelist, "c:/tmp/output.csv")
+    wl = generate_list(filelist, "c:/tmp/output.csv")
+
+    # pages = []
+    # import pickle
+    # f = open('c:/tmp/output.pkl', 'rb')
+    # wl = pickle.load(f)
+    # f.close()
+    # pages = []
+    # for w in wl:
+    #     pages.append(len(wl[w].pages))
+    # import matplotlib.pyplot as plt
+    #
+    # plt.bar(range(0, len(pages)), pages)
+    # plt.show()
+
+
+
     print("done")

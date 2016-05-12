@@ -27,7 +27,7 @@ def generate_list(filelist, outputfile=""):
                     errors += "date mismatch: " + f + "\n"
                     logmsg += " processed:\t" + "date mismatch (current:" + \
                               cur_writer.date+" stored:" + \
-                              writerlist[cur_writer.name].date + " \n"
+                              str(str(writerlist[cur_writer.name].date).encode('utf-8')) + " \n"
             else:
                 writerlist[cur_writer.name] = cur_writer
                 logmsg += " processed:\t" + str(len(cur_writer.pages)) + \

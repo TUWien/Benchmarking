@@ -2,9 +2,63 @@
 
 
 # returns a DirInfo list with all subfolders of dirpath
-def create_database(dirpath, numFilesDesired, ext):
+def create_database_batch(args):
+    import os.path
+    from database import utils
+    from database import indexer
+
+    cRoot = utils.clean_path(args['root'])
+    rootDir = indexer.DirInfo(cRoot)
+
+    for cdir in rootDir.subfolders():
+
+        print("creating new database: %s --------------" % cdir)
+        cargs = args.copy()
+        folder = os.path.basename(cdir)
+        print("cfolder: %s" % folder)
+        print(cargs)
+
+        dstname = "-".join((folder, str(cargs['nsamples'])))
+        logname = ".".join((dstname, "log"))
+
+        # customize args
+        cargs['root'] = cdir
+        cargs['copyto'] = os.path.join(args['copyto'], dstname)
+        cargs['outfile'] = os.path.join(args['outfile'], logname)
+
+        # now create the db
+        create_database(cargs)
+
+
+# returns a DirInfo list with all subfolders of dirpath
+def create_database(args):
+    from database import utils
+    from database import cloner
+
+    # init settings - I personally do not like this design...
+    utils.Settings(args['settings'])
+
+    # index harddisk and reduce fileset
+    set = index_and_reduce_database(
+            args['root'], args['nsamples'], args['ext'])
+
+    # is there a nice way to do this?
+    fc = 0
+    if 'flatcopy' in args:
+        fc = 1
+        print("flat copy")
+
+    if args['outfile'] != "":
+        utils.write(args['outfile'], set)
+    if args['copyto'] != "":
+        cloner.clone(set, args['root'], args['copyto'], fc)
+
+
+# returns a DirInfo list with all subfolders of dirpath
+def index_and_reduce_database(dirpath, numFilesDesired, ext=''):
     from database import crawler
     from database import indexer
+    from database import utils
 
     # init settings - I personally do not like this design...
     utils.Settings()
@@ -18,7 +72,7 @@ def create_database(dirpath, numFilesDesired, ext):
 
     return fileset
 
-
+# picks numFilesDesired samples from the database (equidistantly)
 def reduce_set(dirInfos, numFilesDesired):
     from database import indexer
     import math
@@ -48,8 +102,6 @@ def reduce_set(dirInfos, numFilesDesired):
 
 if __name__ == "__main__":
     import argparse
-    from database import utils
-    from database import cloner
 
     # argument parser
     parser = argparse.ArgumentParser(description='Reduce a database')
@@ -71,19 +123,19 @@ if __name__ == "__main__":
                         default)""")
     parser.add_argument('--settings', default="", metavar="path-to-settings",
                         help="""loads settings from the file""")
-    parser.add_argument('--flatcopy', default=0, metavar='0', type=int,
-                        help="""if true, a flat copy is created (no folder
-                             tree)""")
 
-    args = parser.parse_args()
+    # options:
+    parser.add_argument('--flatcopy', action="store_true", help="""if set,
+                        a flat copy is created (no folder tree)""")
+    parser.add_argument('--batch', action="store_true", help="""if set,
+                        each folder of root-dir is
+                        treated as individual database""")
 
-    # init settings - I personally do not like this design...
-    utils.Settings(args.settings)
+    # get args and make a dict from the namespace
+    args = vars(parser.parse_args())
 
-    # index harddisk and reduce fileset
-    set = create_database(args.root, args.nsamples, args.ext)
-
-    if args.outfile != "":
-        utils.write(args.outfile, set)
-    if args.copyto != "":
-        cloner.clone(set, args.root, args.copyto, args.flatcopy)
+    if 'batch' in args:
+        print("Starting batch mode ------------------")
+        create_database_batch(args)
+    else:
+        create_database(args)

@@ -47,6 +47,7 @@ def index_files(dirpath, ext=""):
 def index_dirs(dirpath):
     from os import listdir
     from os.path import isdir, join
+    from database import utils
 
     dirlist = []
 
@@ -56,7 +57,8 @@ def index_dirs(dirpath):
         for d in listdir(dirpath):
             fp = join(dirpath, d)
             if isdir(fp):
-                dirlist.append(fp)
+                cfp = utils.clean_path(fp)
+                dirlist.append(cfp)
 
     except FileNotFoundError:
         print('%s does not exist - please specify a valid folder' % dirpath)

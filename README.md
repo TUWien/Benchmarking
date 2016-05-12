@@ -22,12 +22,12 @@ python setup.py install
 Database contains scripts to crawl your hard disk and reduce the number of
 specific file types. See:
 ```
-python lib\database\cdb.py --help
+lib\database\cdb.py --help
 ```
 
 Example:
 ```
-python lib\database\cdb.py --outfile C:/temp/db.txt --copyto C:/temp/reduced C:/temp 5
+lib\database\cdb.py --outfile C:/temp/db.txt --copyto C:/temp/reduced C:/temp 5
 ```
 This command locates all images in ``C:/temp``, reduces the set to 5 images and
 copies these images to ``C:/temp/reduced``. Then, ``C:/temp/db.txt`` is
@@ -37,7 +37,7 @@ Call this function from python using:
 
 ```
 import database
-rf = database.cdb.create_database("C:/temp", 13)
+rf = database.cdb.index_and_reduce_database("C:/temp", 13)
 print("\n".join(rf))
 ```
 ### Links

@@ -52,16 +52,19 @@ class WriterList:
             for j in self.wlist:
                 if i.name == j.name and i.date != j.date:
                     if i.date == 0:
-                        del_list.append(i)
+                        if i not in del_list and j not in del_list:
+                            del_list.append(i)
                     elif j.date == 0:
-                        del_list.append(j)
-                    elif len(i.pages) < len(j.pages):
-                        del_list.append(i)
+                        if i not in del_list and j not in del_list:
+                            del_list.append(j)
+                    elif len(i.pages) <= len(j.pages):
+                        if i not in del_list and j not in del_list:
+                            del_list.append(i)
 
         # remove duplicates (taken from https://www.peterbe.com/plog/uniqifiers-benchmark
         del_list = list(set(del_list))
         for d in del_list:
-            self.wlist.pop(d)
+            self.wlist.remove(d)
         for w in self.wlist:
             self.wlist = list(set(self.wlist))
 

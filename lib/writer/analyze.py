@@ -20,6 +20,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    filelist = author.loadfilelist(args.infile)
-    author.generateList(filelist, args.outfile)
+    filelist = author.load_filelist(args.infile)
+    author.generate_list(filelist, args.outfile)
     print("done")

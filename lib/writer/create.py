@@ -5,6 +5,7 @@ if __name__ == "__main__":
     import pickle
     import os
     import math
+    import random
 
     from shutil import copy
 
@@ -62,17 +63,14 @@ if __name__ == "__main__":
         writer_dir = args.outdir + "/" + str(id) + "/"
         os.mkdir(writer_dir)
 
-        # compute step for reduced set
-        step = math.ceil(len(writerlist[w].pages) / maxnum)
+        items = list(range(1, len(writerlist[w].pages)))
+        random.shuffle(items)
+        items = items[0:maxnum]
+        pages = []
+        for i in items:
+            pages.append(writerlist[w].pages[i])
 
-        print('step size: %d' % step)
-
-        # first step through equidistantly
-        newpages = writerlist[w].pages[0:len(writerlist[w].pages):step]
-
-        writerlist[w].pages = newpages[0:maxnum]
-
-        for p in writerlist[w].pages:
+        for p in pages:
             copy(p, writer_dir)
 
         mapping[id] = w

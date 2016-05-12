@@ -25,8 +25,28 @@ def read(filename):
     return data
 
 
+# cleans (replaces) windows like file separators
 def clean_path(p):
     return p.replace("\\", "/")
+
+
+def make_path_unique(filepath):
+    import os.path
+
+    # nothing to do here if the file exists already
+    if not os.path.exists(filepath):
+        return filepath
+
+    filepath, ext = os.path.splitext(filepath)
+
+    for idx in range(1, 1000):
+        newpath = "".join((filepath, "-", str(idx), ext))
+
+        if not os.path.exists(newpath):
+            return newpath
+    else:
+        print('WARNING: I could not find an alternative name for %s'
+              % filepath)
 
 
 class Settings:

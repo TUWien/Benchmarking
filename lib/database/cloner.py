@@ -18,9 +18,8 @@ def clone(srclist, srcpath, dstpath, flat=0):
     clone_threaded(srclist, dstlist)
 
 
+# clones files NOTE: it is not threaded yet
 def clone_threaded(srclist, dstlist):
-    from multiprocessing import Pool
-    from database import utils
 
     print("src size: %d dst size: %d" % (len(srclist), len(dstlist)))
 
@@ -32,6 +31,7 @@ def clone_threaded(srclist, dstlist):
 
 
 def copy(src, dst):
+    from database import utils
     from shutil import copyfile
     import os
 
@@ -40,6 +40,9 @@ def copy(src, dst):
 
         if not os.path.isdir(dname):
             os.makedirs(dname)
+
+        dst = utils.make_path_unique(dst)
+
         copyfile(src, dst)
         print("%s -> %s" % (src, dst))
     except Exception as e:

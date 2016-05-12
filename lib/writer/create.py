@@ -38,7 +38,7 @@ if __name__ == "__main__":
     if args.maxnum == 0 or args.maxnum == []:
         maxnum = args.minnum
 
-    f = open('c:/tmp/output.pkl', 'rb')
+    f = open(args.infile, 'rb')
     writerlist = pickle.load(f)
     f.close()
 

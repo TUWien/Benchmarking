@@ -26,7 +26,7 @@ if __name__ == "__main__":
                         )
     parser.add_argument('--maxnum', default=0, metavar="int", type=int,
                         help="""maximal number of pages (if 0 or not set minimal number
-                        of pages are used)""")
+                        of pages are used, -1 for all pages)""")
 
     args = parser.parse_args()
 
@@ -35,6 +35,10 @@ if __name__ == "__main__":
         exit()
     if os.listdir(args.outdir) != []:
         print("output directory is not empty ... exiting")
+        exit()
+
+    if args.minnum < 0:
+        print("minimal number of documents is smaller than 0 ... exiting")
         exit()
 
     if args.maxnum == 0 or args.maxnum == []:
@@ -46,35 +50,39 @@ if __name__ == "__main__":
     writerlist = pickle.load(f)
     f.close()
 
-    print("filtering writers: current number:" + str(len(writerlist)))
+    print("filtering writers: current number:" + str(len(writerlist.wlist)))
     del_items = []
-    for n, w in writerlist.items():
+    for w in writerlist.wlist:
         if len(w.pages) < args.minnum:
-            del_items.append(n)
+            del_items.append(w)
 
     for i in del_items:
-        writerlist.pop(i)
+        writerlist.wlist.pop(i)
 
-    print("remaining writers after filter:" + str(len(writerlist)))
+    print("remaining writers after filter:" + str(len(writerlist.wlist)))
 
-    id = 0
     mapping = {}
-    for w in writerlist:
-        writer_dir = args.outdir + "/" + str(id) + "/"
+    for w in writerlist.wlist:
+        print("processing id " + str(w.id) + " with " + str(len(w.pages)) + " pages")
+
+        writer_dir = args.outdir + "/" + str(w.id) + "/"
         os.mkdir(writer_dir)
 
-        items = list(range(1, len(writerlist[w].pages)))
-        random.shuffle(items)
-        items = items[0:maxnum]
         pages = []
-        for i in items:
-            pages.append(writerlist[w].pages[i])
+        if args.maxnum == -1:
+            pages = w.pages
+        else:
+            # take random pages
+            items = list(range(0, len(w.pages)))
+            random.shuffle(items)
+            items = items[0:maxnum]
+            for i in items:
+                pages.append(w.pages[i])
 
         for p in pages:
             copy(p, writer_dir)
 
-        mapping[id] = w
-        id += 1
+        mapping[w.id] = w
 
     if args.mapfile != "":
         f = open(args.mapfile, 'wb')

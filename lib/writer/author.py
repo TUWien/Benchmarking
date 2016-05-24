@@ -36,7 +36,7 @@ def generate_list(filelist, outputfile=""):
 
     print("\n\nprinting list")
     for w in writerlist.wlist:
-        encw = str(str(w.id)+ "  " + str(w.name)).encode('utf-8', errors='ignore')
+        encw = str(str(w.id) + "  " + str(w.name)).encode('utf-8', errors='ignore')
         enco = str(" " + str(w.date) + " " +
                    str(len(w.pages)) + " pages").encode(
                     'utf-8', errors='ignore')

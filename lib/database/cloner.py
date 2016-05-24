@@ -1,9 +1,10 @@
 #!/usr/local/bin/python
 
 
+# creates valid destination paths and clones all filepaths in srclist
+# if flat is true, files are directly saved to dstpath
+# if flat is false, the hierarchy is replicated relative to srcpath
 def clone(srclist, srcpath, dstpath, flat=0):
-
-    print(srcpath, dstpath)
 
     # create destination filenames
     dstlist = []
@@ -15,21 +16,14 @@ def clone(srclist, srcpath, dstpath, flat=0):
 
         dstlist.append(p)
 
-    clone_threaded(srclist, dstlist)
-
-
-# clones files NOTE: it is not threaded yet
-def clone_threaded(srclist, dstlist):
-
-    print("src size: %d dst size: %d" % (len(srclist), len(dstlist)))
-
-    # p = Pool(utils.Settings.config['processes'])
-    # p.map(copy, srclist, dstlist)
-
+    print("start cloning...")
     for i in range(0, len(srclist)):
         copy(srclist[i], dstlist[i])
 
 
+# Copies the file from src to dst. If dst exists,
+# an incrementer is added to the filename:
+# josef.png -> josef-1.png
 def copy(src, dst):
     from database import utils
     from shutil import copyfile
@@ -65,6 +59,7 @@ def replace_path(filepath, srcpath, dstpath):
     return dp
 
 
+# merges the filename in filepath with dstpath
 def create_path(filepath, dstpath):
     import ntpath
     import os

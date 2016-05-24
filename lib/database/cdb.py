@@ -11,7 +11,7 @@ def create_database_batch(args):
     rootDir = indexer.DirInfo(cRoot)
 
     for cdir in rootDir.subfolders():
-
+        print("\n")
         print("creating new database: %s --------------" % cdir)
         cargs = args.copy()
         folder = os.path.basename(cdir)
@@ -40,16 +40,11 @@ def create_database(args):
     set = index_and_reduce_database(
             args['root'], args['nsamples'], args['ext'])
 
-    # is there a nice way to do this?
-    fc = 0
-    if 'flatcopy' in args:
-        fc = 1
-        print("flat copy")
-
     if args['outfile'] != "":
         utils.write(args['outfile'], set)
     if args['copyto'] != "":
-        cloner.clone(set, args['root'], args['copyto'], fc)
+        print("")   # empty line
+        cloner.clone(set, args['root'], args['copyto'], args['flatcopy'])
 
 
 # returns a DirInfo list with all subfolders of dirpath
@@ -87,8 +82,6 @@ def reduce_set(dirInfos, numFilesDesired):
     # compute step for reduced set
     step = math.floor(nf/numFilesDesired)
 
-    print('step size: %d' % step)
-
     # first step through equidistantly
     rf = files[0:len(files):step]
 
@@ -100,6 +93,8 @@ def reduce_set(dirInfos, numFilesDesired):
 
 if __name__ == "__main__":
     import argparse
+    import sys
+    from datetime import datetime
 
     # argument parser
     parser = argparse.ArgumentParser(description='Reduce a database')
@@ -128,12 +123,30 @@ if __name__ == "__main__":
     parser.add_argument('--batch', action="store_true", help="""if set,
                         each folder of root-dir is
                         treated as individual database""")
+    parser.add_argument('--log', action="store_true", help="""save
+                        outputs to a logfile in this folder
+                        rather than printing them to the cmd""")
 
     # get args and make a dict from the namespace
     args = vars(parser.parse_args())
 
-    if 'batch' in args:
-        print("Starting batch mode ------------------")
+    # write print to log file
+    # NOTE: the crawling is still reported to the cmd since these are processes
+    # this is (at least for now) ok
+    oldSysOut = sys.stdout
+    if args['log']:
+        dstr = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        logName = "".join(("create-database-", dstr, ".log"))
+        logFile = open(logName, "w")
+        sys.stdout = logFile
+
+    if args['batch']:
+        print("mode: batch")
         create_database_batch(args)
     else:
         create_database(args)
+
+    if args['log']:
+        sys.stdout = oldSysOut
+        logFile.close()
+        print("log file written to: %s" % logName)

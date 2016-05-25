@@ -40,5 +40,23 @@ import database
 rf = database.cdb.index_and_reduce_database("C:/temp", 13)
 print("\n".join(rf))
 ```
+
+### Writer ###
+Writer contains scripts to analyze XML files in the mets format. It extracts the
+and his corresponding pages out of the XML files and copies it to a new directory
+
+First you have to create a database with all the xml files using the database crawler:
+```
+lib\database\cdb.py --outfile c:\tmp\db.txt --ext xml c:\tmp\myDatabase 1000000
+```
+From these xml files the writers are than extracted using
+```
+lib\writer\analyze.py --infile c:\tmp\db.txt --outfile c:\tmp\writers.txt --dumpfile c:\tmp\writer.pkl
+```
+and then the dataset is created using
+```
+lib\writer\create.py --infile c:\tmp\writer.pkl --outdir c:\tmp\writer-database --minnum 0 --maxnum -1 --mapfile c:\tmp\writer-database\authorName-to-id-mapping.txt
+```
+
 ### Links
 - CVL http://www.caa.tuwien.ac.at/cvl/

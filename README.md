@@ -55,8 +55,10 @@ lib\writer\analyze.py --infile c:\tmp\db.txt --outfile c:\tmp\writers.txt --dump
 ```
 and then the dataset is created using
 ```
-lib\writer\create.py --infile c:\tmp\writer.pkl --outdir c:\tmp\writer-database --minnum 0 --maxnum -1 --mapfile c:\tmp\writer-database\authorName-to-id-mapping.txt
+lib\writer\create.py --infile c:\tmp\writer.pkl --outdir c:\tmp\writer-database \\
+--minnum 0 --maxnum -1 --mapfile c:\tmp\writer-database\authorName-to-id-mapping.txt
 ```
-"minnum" is the minimal number of pages, and maxnum is the maximal number of pages (if -1 than all pages are taken from this writer)
+"minnum" is the minimal number of pages, and "maxnum" is the maximal number of pages
+(if -1 than all pages are taken from this writer)
 ### Links
 - CVL http://www.caa.tuwien.ac.at/cvl/

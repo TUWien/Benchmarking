@@ -38,7 +38,7 @@ def create_database(args):
 
     # index harddisk and reduce fileset
     set = index_and_reduce_database(
-            args['root'], args['nsamples'], args['ext'])
+            args['root'], args['nsamples'], args['ext'], args['ignoresmall'])
 
     if args['outfile'] != "":
         utils.write(args['outfile'], set)
@@ -48,7 +48,7 @@ def create_database(args):
 
 
 # returns a DirInfo list with all subfolders of dirpath
-def index_and_reduce_database(dirpath, numFilesDesired, ext=''):
+def index_and_reduce_database(dirpath, numFilesDesired, ext='', ignoresmall=False):
     from database import crawler
     from database import indexer
     from database import utils
@@ -61,12 +61,12 @@ def index_and_reduce_database(dirpath, numFilesDesired, ext=''):
         ext = indexer.image_ext()
 
     dirs = crawler.crawl_folder(dirpath, ext)
-    fileset = reduce_set(dirs, numFilesDesired)
+    fileset = reduce_set(dirs, numFilesDesired, ignoresmall)
 
     return fileset
 
 # picks numFilesDesired samples from the database (equidistantly)
-def reduce_set(dirInfos, numFilesDesired):
+def reduce_set(dirInfos, numFilesDesired, ignoresmall):
     from database import indexer
     import math
 
@@ -77,7 +77,10 @@ def reduce_set(dirInfos, numFilesDesired):
     if nf < numFilesDesired:
         print('WARNING: you asked for %d but I only found %d relevant files' %
               (numFilesDesired, nf))
-        return files
+        if ignoresmall:
+            return []
+        else:
+            return files
 
     # compute step for reduced set
     step = math.floor(nf/numFilesDesired)
@@ -123,6 +126,8 @@ if __name__ == "__main__":
     parser.add_argument('--batch', action="store_true", help="""if set,
                         each folder of root-dir is
                         treated as individual database""")
+    parser.add_argument('--ignoresmall', action="store_true", help="""if set,
+        folders with less files than specified are skipped""")
     parser.add_argument('--log', action="store_true", help="""save
                         outputs to a logfile in this folder
                         rather than printing them to the cmd""")

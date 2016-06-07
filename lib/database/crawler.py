@@ -33,12 +33,13 @@ def crawl_recursive_threaded(dirpath, ext):
     # NOTE: child calls must not be pooled
     p = Pool(utils.Settings.config['processes'])
     infos = p.map(crawl_recursive, cInfos)
-
+    p.close()
+    
     # remove hierarchy
     dirInfos = [d for sublist in infos for d in sublist]
     dirInfos.append(cdir)
 
-    print('I was crawling with %d processes' %
+    print('IN was crawling with %d processes' %
           utils.Settings.config['processes'])
 
     return dirInfos

@@ -1,3 +1,4 @@
 # git ignore file
 build
 __pycache__
+*.log

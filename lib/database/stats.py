@@ -25,7 +25,8 @@ def save_to_log(logpath, dirs):
 
     stats = []
     for d in dirs:
-        stats.append(d.to_string())
+
+        stats.append(d.to_string(True))
         print(d.to_string())
 
     if logpath:

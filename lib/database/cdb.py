@@ -44,11 +44,13 @@ def create_database(args):
         utils.write(args['outfile'], set)
     if args['copyto'] != "":
         print("")   # empty line
-        cloner.clone(set, args['root'], args['copyto'], args['flatcopy'])
+        cloner.clone(set, args['root'], args['copyto'],
+                     args['flatcopy'], args['deletesource'])
 
 
 # returns a DirInfo list with all subfolders of dirpath
-def index_and_reduce_database(dirpath, numFilesDesired, ext='', ignoresmall=False):
+def index_and_reduce_database(dirpath, numFilesDesired, ext='',
+                              ignoresmall=False):
     from database import crawler
     from database import indexer
     from database import utils
@@ -64,6 +66,7 @@ def index_and_reduce_database(dirpath, numFilesDesired, ext='', ignoresmall=Fals
     fileset = reduce_set(dirs, numFilesDesired, ignoresmall)
 
     return fileset
+
 
 # picks numFilesDesired samples from the database (equidistantly)
 def reduce_set(dirInfos, numFilesDesired, ignoresmall):
@@ -131,6 +134,9 @@ if __name__ == "__main__":
     parser.add_argument('--log', action="store_true", help="""save
                         outputs to a logfile in this folder
                         rather than printing them to the cmd""")
+    parser.add_argument('--deletesource', action="store_true",
+                        help="""deletes the original files - hence files are
+                        moved than copying""")
 
     # get args and make a dict from the namespace
     args = vars(parser.parse_args())

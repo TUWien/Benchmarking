@@ -15,7 +15,7 @@ def crawl_folder(dirpath, ext):
 
     return dirInfos
 
-
+    
 # recusrive function that appends all subfolders to allfolders
 def crawl_recursive_threaded(dirpath, ext):
     from database import indexer
@@ -34,12 +34,12 @@ def crawl_recursive_threaded(dirpath, ext):
     p = Pool(utils.Settings.config['processes'])
     infos = p.map(crawl_recursive, cInfos)
     p.close()
-    
+
     # remove hierarchy
     dirInfos = [d for sublist in infos for d in sublist]
     dirInfos.append(cdir)
 
-    print('IN was crawling with %d processes' %
+    print('I was crawling with %d processes' %
           utils.Settings.config['processes'])
 
     return dirInfos

@@ -117,10 +117,23 @@ class DirInfo:
     def size(self):
         return len(self.filepaths)
 
-    # lists the folder name and the number of files contained
-    def to_string(self):
+    def size_recursive(self):
 
-        s = "[%s] \t %s" % (str(self.size()), self.name)
+        total = len(self.filepaths)
+
+        for d in dirs_to_info(self.subfolders(), self.ext):
+            total += d.size_recursive()
+
+        return total
+
+    # lists the folder name and the number of files contained
+    def to_string(self, all_count=False):
+
+        if all_count:
+            s = "[%s|%s] \t %s" % (str(self.size_recursive()),
+                                   str(self.size()), self.name)
+        else:
+            s = "[%s] \t %s" % (str(self.size()), self.name)
 
         return s
 

@@ -4,7 +4,7 @@
 # creates valid destination paths and clones all filepaths in srclist
 # if flat is true, files are directly saved to dstpath
 # if flat is false, the hierarchy is replicated relative to srcpath
-def clone(srclist, srcpath, dstpath, flat=0):
+def clone(srclist, srcpath, dstpath, flat=0, move=False):
 
     # create destination filenames
     dstlist = []
@@ -16,17 +16,17 @@ def clone(srclist, srcpath, dstpath, flat=0):
 
         dstlist.append(p)
 
-    print("start cloning...")
     for i in range(0, len(srclist)):
-        copy(srclist[i], dstlist[i])
+        copy(srclist[i], dstlist[i], move)
 
 
 # Copies the file from src to dst. If dst exists,
 # an incrementer is added to the filename:
 # josef.png -> josef-1.png
-def copy(src, dst):
+def copy(src, dst, moveFiles=False):
     from database import utils
     from shutil import copyfile
+    from shutil import move
     import os
 
     try:
@@ -37,8 +37,15 @@ def copy(src, dst):
 
         dst = utils.make_path_unique(dst)
 
-        copyfile(src, dst)
-        print("%s -> %s" % (src, dst))
+        attrStr = ''
+        if moveFiles is False:
+            copyfile(src, dst)
+            attrStr = 'copied'
+        else:
+            move(src, dst)
+            attrStr = 'moved'
+
+        print("%s -> %s %s" % (src, dst, attrStr))
     except Exception as e:
         print("could not copy: %s -> %s" % (src, dst))
         print(e)

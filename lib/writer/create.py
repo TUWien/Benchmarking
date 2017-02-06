@@ -28,6 +28,10 @@ if __name__ == "__main__":
                         help="""maximal number of pages (if 0 or not set minimal number
                         of pages are used, -1 for all pages)""")
 
+    parser.add_argument('--ignoreMoreThan', default=0, metavar="int", type=int,
+                        help="""if a folder has more images than ignoreMoreThan, this folder is ignored
+                        (helpfull for creating trainings dataset with the rest of the originial dataset""")
+
     args = parser.parse_args()
 
     if not os.path.isdir(args.outdir):
@@ -54,6 +58,8 @@ if __name__ == "__main__":
     del_items = []
     for w in writerlist.wlist:
         if len(w.pages) < args.minnum:
+            del_items.append(w)
+        if len(w.pages) > args.ignoreMoreThan:
             del_items.append(w)
 
     for i in del_items:

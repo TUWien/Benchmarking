@@ -44,11 +44,19 @@ created which contains the paths to the original images of the reduced set.
 
 Call this function from python using:
 
-```bat
+```python
 import database
 rf = database.cdb.index_and_reduce_database("C:/temp", 13)
 print("\n".join(rf))
 ```
+
+Another script `split.py` splits a folder into train, evaluation and test set with user set proportions:
+
+```bat
+lib\database\split.py C:/temp C:/temp/split --train 0.2 --eval 0.1
+```
+
+This command copies 20% of the images contained in `C:/temp` into `C:/temp/split/train`, 10% into `C:/temp/split/eval` and all other images into `C:/temp/split/test`. You can set --eval 0 if you don't need an evaluation set.
 
 ## Writer
 

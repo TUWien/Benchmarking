@@ -10,6 +10,11 @@ def create_database_batch(args):
     cRoot = utils.clean_path(args['root'])
     rootDir = indexer.DirInfo(cRoot)
 
+    if not rootDir.subfolders():
+        print(cRoot + " has no subfolders...")
+        print("""Please choose a different directory or \
+remove --batch""")
+
     for cdir in rootDir.subfolders():
         print("\n")
         print("creating new database: %s --------------" % cdir)
